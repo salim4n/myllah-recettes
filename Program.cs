@@ -10,7 +10,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-builder.Services.AddSingleton<IRecipeStore, RecipeStore>();
+builder.Services.AddSingleton<RecipeStore>();
 builder.Services.AddScoped<IRecipeService, RecipeService>();
 
 builder.Services.AddMicrosoftGraphClient("https://graph.microsoft.com/User.Read");

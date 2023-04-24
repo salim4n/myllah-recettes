@@ -1,9 +1,10 @@
 ﻿@page "/recipeDetails/{id:int}"
 @inject NavigationManager Navigation
-@inject IRecipeService RecipeService
+@inject RecipeStore RecipeStore
+@implements IDisposable
 
 <div class="container pt-4 pt-md-5">
-	@if(recipe is not null)
+	@if(RecipeStore.RecipesState is not null)
 	{
 		<div class="row pb-4">
 			<div class="col-6">
@@ -19,19 +20,19 @@
 			</div>
 		</div>
 		<div class="row container bg-taupe rounded-pill text-center p-3 m-3">
-			<h1 class=" blanc">@recipe?.Name</h1>
+			<h1 class=" blanc">@RecipeStore?.RecipeState.Name</h1>
 		</div>
 		<div class="row">
 			<div class="col-7">
 				<div class="list-group bg-taupe text-center">
-					<div class="blanc">@((MarkupString?)recipe?.Description)</div>
+					<div class="blanc">@((MarkupString?)@RecipeStore?.RecipeState.Description)</div>
 				</div>
 				<br />
 			</div>
 			<div class="col-5">
-				<img src="@recipe.ImageUri"
+				<img src="@RecipeStore?.RecipeState.ImageUri"
 					 width="100%"
-					 alt="@recipe.Name" />
+					 alt="@RecipeStore.RecipeState.Name" />
 			</div>
 		</div>
 	}
@@ -46,23 +47,38 @@
 	[Parameter]
 	public int Id { get; set; }
 
-	Recipe? recipe = null;
 	bool deleteSuccess = false;
 
-	protected override async Task OnParametersSetAsync()
+	protected override void OnParametersSet()
 	{
-		recipe = await RecipeService.GetRecipeById(Id);
+		if (Id == default)
+		{
+			Navigation.NavigateTo("/");
+		}
+		else
+		{
+			RecipeStore.GetRecipe(Id);
+			RecipeStore.OnStateChange += StateHasChanged;
+		
+		}
 	}
 
-	protected async Task handleDelete()
+	protected  async Task handleDelete()
 	{
-		deleteSuccess = await RecipeService.DeleteRecipe(recipe);
+		await RecipeStore.DeleteRecipe(RecipeStore.RecipeState);
+		RecipeStore.OnStateChange += StateHasChanged;
+		Navigation.NavigateTo("/");
 
 	}
 
 	protected async Task handleUpdate()
 	{
 		//Navigation.NavigateTo("",)
+	}
+
+	public void Dispose()
+	{
+		RecipeStore.OnStateChange -= StateHasChanged;
 	}
 }
 

@@ -1,0 +1,42 @@
+﻿@page "/"
+@inject IRecipeService RecipeService
+
+<PageTitle>Mes Recettes</PageTitle>
+
+<div class="container">
+    <div class="row pb-4 pt-4 text-center">
+        <span class="container bg-taupe rounded-pill">
+            <h1 class="blanc">Mes Recettes</h1>
+        </span>
+
+    </div>
+
+    @if (Recipes.Count  == 0 )
+    {
+        <Loader/>
+    }
+    else
+    {
+        <div class="row pb-4 pt-4">
+            @foreach (var recipe in Recipes)
+            {
+                <div class="col-sm-6 col-lg-3 p-2">
+                    <RecipeCard recipe=@recipe />
+                </div>
+            }
+        </div>
+    }
+
+</div>
+
+
+
+@code{
+    List<Recipe> Recipes = new List<Recipe>();
+
+    protected override async  Task OnInitializedAsync()
+    {
+        Recipes = await RecipeService.GetAllRecipe();
+    }
+
+}

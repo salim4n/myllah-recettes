@@ -1,0 +1,40 @@
+﻿
+@inject NavigationManager Navigate
+
+
+<span @onclick="()=> handleClick(recipe.Id)">
+	<div class="card hoverable ">
+		<img src="@recipe?.ImageUri"
+			 class="card-img-top"
+			 alt="@recipe?.Name"
+			  />
+		<div class="card-body bg-taupe rounded-bottom">
+			<div class="text-center ">
+				<h5 class="card-title blanc">@recipe?.Name</h5>
+			</div>
+		</div>
+	</div>
+</span>
+
+
+@code {
+	[Parameter]
+	public Recipe? recipe { get; set; }
+
+	protected void handleClick(int id)
+	{
+		Navigate.NavigateTo($"/RecipeDetails/{id}");
+	}
+
+}
+
+<style>
+	.card{
+		width: 18rem;
+	}
+
+	img{
+		height:200px;
+		object-fit: cover;
+	}
+</style>

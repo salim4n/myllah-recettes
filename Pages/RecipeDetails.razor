@@ -1,0 +1,75 @@
+﻿@page "/recipeDetails/{id:int}"
+@inject NavigationManager Navigation
+@inject IRecipeService RecipeService
+
+<div class="container pt-4 pt-md-5">
+	@if(recipe is not null)
+	{
+		<div class="row pb-4">
+			<div class="col-6">
+				<button class="btn btn-danger form-control rounded-pill"
+				@onclick="()=>handleDelete()">
+					Supprimer
+				</button>
+			</div>
+			<div class="col-6">
+				<button class="btn btn-warning blanc form-control rounded-pill">
+					Modifier
+				</button>
+			</div>
+		</div>
+		<div class="row container bg-taupe rounded-pill text-center p-3 m-3">
+			<h1 class=" blanc">@recipe?.Name</h1>
+		</div>
+		<div class="row">
+			<div class="col-7">
+				<div class="list-group bg-taupe text-center">
+					<div class="blanc">@((MarkupString?)recipe?.Description)</div>
+				</div>
+				<br />
+			</div>
+			<div class="col-5">
+				<img src="@recipe.ImageUri"
+					 width="100%"
+					 alt="@recipe.Name" />
+			</div>
+		</div>
+	}
+	else
+	{
+		<Loader/>
+	}
+
+		</div>
+
+@code {
+	[Parameter]
+	public int Id { get; set; }
+
+	Recipe? recipe = null;
+	bool deleteSuccess = false;
+
+	protected override async Task OnParametersSetAsync()
+	{
+		recipe = await RecipeService.GetRecipeById(Id);
+	}
+
+	protected async Task handleDelete()
+	{
+		deleteSuccess = await RecipeService.DeleteRecipe(recipe);
+
+	}
+
+	protected async Task handleUpdate()
+	{
+		//Navigation.NavigateTo("",)
+	}
+}
+
+<style>
+	img{
+		border-radius: 50%;
+		height: 500px;
+		object-fit:cover;
+	}
+</style>

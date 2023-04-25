@@ -41,21 +41,7 @@ namespace client.Store.RecipeStore
 				NotifyStateChanged();
 		}
 
-        public async Task AddRecipe(CreateRecipeModel recipe)
-        {
-            ResetErrorMesage();
-			using var scope = _serviceScopeFactory.CreateScope();
-			var recipeService = scope.ServiceProvider.GetRequiredService<IRecipeService>();
-			var recipeToAdd = await recipeService.CreateRecipe(recipe);
-            if (recipeToAdd.Name != string.Empty || recipeToAdd.Name != "")
-            {
-                RecipesListState.Add(recipeToAdd);
-                NotifyStateChanged();
-            }
-            else
-                ErrorMessage = "Echec de création de Recette";
-
-        }
+       
 
         public async Task DeleteRecipe(Recipe recipe)
         {

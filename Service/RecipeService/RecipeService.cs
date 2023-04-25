@@ -15,7 +15,15 @@ namespace client.Service.RecipeService
 
         public async Task<Recipe> CreateRecipe(CreateRecipeModel recipe)
         {
-            var result = await _http.PostAsJsonAsync($"{baseUri}/api/Recipe", recipe);
+            var formContent = new MultipartFormDataContent
+            {
+                { new StringContent(recipe.Name), "Name" },
+                { new StringContent(recipe.Description), "Description" },
+                { new StreamContent(recipe.File.OpenReadStream()), "file", recipe.File.Name },
+                { new StringContent(recipe.UserName), "UserName" }
+            };
+
+            var result = await _http.PostAsync($"{baseUri}/api/Recipe", formContent);
             var recipeCreated = await result.Content.ReadFromJsonAsync<Recipe>();
             return recipeCreated;
         }

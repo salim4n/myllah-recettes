@@ -6,6 +6,7 @@
 @inject HttpClient http
 @inject IJSRuntime JSRuntime
 @inject RecipeStore RecipeStore
+@inject IRecipeService RecipeService
 
 <h1 class="taupe text-lg-center">Créer une nouvelle recette</h1>
 <div class="row">
@@ -29,7 +30,7 @@
         </div>
         <div class="mb-3 col-6">
             <label for="file" class="form-label taupe">Photo de votre recette</label>
-            <InputFile class="form-control" id="file" maxFileSize="512000"
+            <InputFile class="form-control" id="file"
             OnChange="@HandleFileChange" />
             <ValidationMessage For="@(() => recipe.File)" />
         </div>
@@ -53,41 +54,24 @@
 
     private async Task SendRecipeToApi()
     {
-
-        var formData = new MultipartFormDataContent();
-
-        formData.Add(new StringContent(recipe.Name), "Name");
-        formData.Add(new StringContent(recipe.Description), "Description");
-        formData.Add(new StreamContent(recipe.File.OpenReadStream()), "File", recipe.File.Name);
-        formData.Add(new StringContent("Camille"), "UserName");
+        recipe.UserName = "Camille";
         isLoading = true;
-        await RecipeStore.AddRecipe(formData);
+        var recipeDb = await RecipeService.CreateRecipe(recipe);
         isLoading = false;
-        if (RecipeStore.ErrorMessage == string.Empty)
+        if (recipeDb.Id is not 0)
         {
+            RecipeStore.RecipesListState.Add(recipeDb);
             Nav.NavigateTo("/");
         }
         else
-        {
-            errorMessage = RecipeStore.ErrorMessage;
-        }
-
+            errorMessage = "Echec de création de la recette";
+    
     }
 
 
     private void HandleFileChange(InputFileChangeEventArgs e)
     {
         recipe.File = e.File;
-    }
-    public class CreateRecipeForm
-    {
-        [Required(ErrorMessage = "Le Nom est obligatoire.")]
-        public string Name { get; set; }
-        [Required(ErrorMessage = "La Description est obligatoire.")]
-        public string Description { get; set; }
-        [Required(ErrorMessage = "Une Image est obligatoire.")]
-        public IBrowserFile File { get; set; }
-        public string UserName { get; set; }
     }
 }
 

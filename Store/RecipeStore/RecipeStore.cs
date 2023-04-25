@@ -61,6 +61,7 @@ namespace client.Store.RecipeStore
 			using var scope = _serviceScopeFactory.CreateScope();
 			var recipeService = scope.ServiceProvider.GetRequiredService<IRecipeService>();
 			RecipeState = await recipeService.UpdateRecipe(recipe);
+            NotifyStateChanged();
         }
 
         public async void GetRecipe(int id)

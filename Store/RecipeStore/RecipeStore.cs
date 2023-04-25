@@ -36,7 +36,7 @@ namespace client.Store.RecipeStore
 				NotifyStateChanged();
 		}
 
-        public async Task AddRecipe(Recipe recipe)
+        public async Task AddRecipe(CreateRecipe recipe)
         {
 			using var scope = _serviceScopeFactory.CreateScope();
 			var recipeService = scope.ServiceProvider.GetRequiredService<IRecipeService>();
@@ -58,7 +58,7 @@ namespace client.Store.RecipeStore
 
         }
 
-        public async Task UpdateRecipe(Recipe recipe)
+        public async Task UpdateRecipe(UpdateRecipe recipe)
         {
 			using var scope = _serviceScopeFactory.CreateScope();
 			var recipeService = scope.ServiceProvider.GetRequiredService<IRecipeService>();

@@ -14,7 +14,8 @@
 				</button>
 			</div>
 			<div class="col-6">
-				<button class="btn btn-warning blanc form-control rounded-pill">
+				<button class="btn btn-warning blanc form-control rounded-pill"
+				@onclick="()=>NavigateToUpdateRecipe()">
 					Modifier
 				</button>
 			</div>
@@ -59,7 +60,7 @@
 		{
 			RecipeStore.GetRecipe(Id);
 			RecipeStore.OnStateChange += StateHasChanged;
-		
+
 		}
 	}
 
@@ -71,9 +72,14 @@
 
 	}
 
+	protected void NavigateToUpdateRecipe()
+	{
+		Navigation.NavigateTo($"/updateRecipe/{Id}");
+	}
+
 	protected async Task handleUpdate()
 	{
-		//Navigation.NavigateTo("",)
+		NavigateToUpdateRecipe();
 	}
 
 	public void Dispose()

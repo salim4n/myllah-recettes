@@ -6,7 +6,7 @@ namespace client.Service.RecipeService
     {
         public Task<List<Recipe>> GetAllRecipe();
         public Task<Recipe> CreateRecipe(CreateRecipeModel recipe);
-        public Task<Recipe> UpdateRecipe(UpdateRecipe recipe);
+        public Task<Recipe> UpdateRecipe(UpdateRecipeModel recipe);
         public Task<bool> DeleteRecipe(Recipe recipe);
         public Task<Recipe> GetRecipeById(int id);
     }

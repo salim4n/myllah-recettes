@@ -1,4 +1,4 @@
-﻿@page "/create-recipe"
+﻿@page "/updateRecipe/{id:int}"
 @using System.Net.Http
 @using Microsoft.AspNetCore.Components.Forms
 @using System.ComponentModel.DataAnnotations
@@ -7,10 +7,9 @@
 @inject IJSRuntime JSRuntime
 @inject RecipeStore RecipeStore
 @inject IRecipeService RecipeService
-@inject GraphServiceClient GraphServiceClient
 @attribute [Authorize]
 
-<h1 class="taupe text-lg-center">Créer une nouvelle recette</h1>
+<h1 class="taupe text-lg-center">Modifier la Recette</h1>
 <div class="row">
     <PopMessage message="@errorMessage"/>
 </div>
@@ -20,18 +19,17 @@
     <ValidationSummary />
     <div class="d-flex align-items-center justify-content-center pb-4">
         <button type="submit"
-                disabled="@(!IsValid)"
-                class="btn blanc bg-taupe rounded-pill">@(isLoading ? "Création en cours..." : "Créer la recette")
+                class="btn blanc bg-taupe rounded-pill">@(isLoading ? "Modification en cours..." : "Modifier la recette")
     </button>
     </div>
     <div class="row">
         <div class="mb-3 col-6">
             <label for="name" class="form-label taupe">Nom</label>
-            <InputText class="form-control" id="name" @bind-Value="recipe.Name" />
-            <ValidationMessage For="@(() => recipe.Name)" />
+            <InputText class="form-control" id="name" @bind-Value="recipeToUpdate.Name" />
+            <ValidationMessage For="@(() => recipeToUpdate.Name)" />
         </div>
         <div class="mb-3 col-6">
-            <label for="file" class="form-label taupe">Photo de votre recette</label>
+            <label for="file" class="form-label taupe">Nouvelle Photo de votre recette</label>
             <InputFile class="form-control" id="file"
             OnChange="@HandleFileChange" />
             <ValidationMessage For="@(() => recipe.File)" />
@@ -40,46 +38,45 @@
 
     <div class="mb-3 col-6">
         <label for="description" class="form-label taupe">Description</label>
-        <InputTextArea class="form-control" @bind-Value="recipe.Description" />
-        <ValidationMessage For="@(() => recipe.Description)" />
+        <InputTextArea class="form-control" @bind-Value="recipeToUpdate.Description" />
+        <ValidationMessage For="@(() => recipeToUpdate.Description)" />
     </div>
 </EditForm>
 
 @code {
-    private CreateRecipeModel recipe = new();
+
+    [Parameter]
+    public int Id { get; set; }
+    private UpdateRecipeModel recipe = new();
+    private Recipe recipeToUpdate = new();
     User? user;
     private bool isLoading = false;
     string errorMessage = string.Empty;
 
-    private bool IsValid => !string.IsNullOrEmpty(recipe.Name)
-        && !string.IsNullOrEmpty(recipe.Description)
-        && recipe.File != null;
 
     protected override async Task OnInitializedAsync()
     {
-        try
-        {
-            user = await GraphServiceClient.Me.Request().GetAsync();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-        }
+
+        recipeToUpdate = RecipeStore.RecipesListState
+        .FirstOrDefault(r => r.Id == Id);
     }
 
     private async Task SendRecipeToApi()
     {
-        recipe.UserName = user?.DisplayName != null ? user?.DisplayName : user?.Mail;
+        recipe.Id = Id;
+        recipe.Name = recipeToUpdate.Name;
+        recipe.Description = recipeToUpdate.Description;
         isLoading = true;
-        var recipeDb = await RecipeService.CreateRecipe(recipe);
+        var recipeUpdated = await RecipeService.UpdateRecipe(recipe);
         isLoading = false;
-        if (recipeDb.Id is not 0)
+        if (recipeUpdated.Id is not 0)
         {
-            RecipeStore.RecipesListState.Add(recipeDb);
-            Nav.NavigateTo("/");
+            RecipeStore.RecipesListState.Add(recipeUpdated);
+            RecipeStore.OnStateChange += StateHasChanged;
+            Nav.NavigateTo("/recipeDetails/"+recipeUpdated.Id);
         }
         else
-            errorMessage = "Echec de création de la recette";
+            errorMessage = "Echec de modification de la recette";
     
     }
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.Graph;
 using System.ComponentModel.DataAnnotations;
 
 namespace client.Models
@@ -26,8 +27,9 @@ namespace client.Models
 
     }
 
-    public class UpdateRecipe
+    public class UpdateRecipeModel
     {
+        public int Id { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }
         public IBrowserFile? File { get; set; }

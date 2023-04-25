@@ -15,8 +15,10 @@ namespace client.Store.RecipeStore
         }
 
         public event Action? OnStateChange;
-        public List<Recipe> RecipesState { get; set; } = new List<Recipe>();
+        public List<Recipe> RecipesListState { get; set; } = new List<Recipe>();
         public Recipe RecipeState { get; set; } = new Recipe();
+        public UpdateRecipe UpdateRecipeState { get; set; } = new ();
+        public CreateRecipe CreateRecipeState { get; set; } = new ();
 
         private void NotifyStateChanged() => OnStateChange?.Invoke();
 
@@ -30,7 +32,7 @@ namespace client.Store.RecipeStore
         {
 				using var scope = _serviceScopeFactory.CreateScope();
 				var recipeService = scope.ServiceProvider.GetRequiredService<IRecipeService>();
-				RecipesState = await recipeService.GetAllRecipe();
+				RecipesListState = await recipeService.GetAllRecipe();
 				NotifyStateChanged();
 		}
 
@@ -39,7 +41,7 @@ namespace client.Store.RecipeStore
 			using var scope = _serviceScopeFactory.CreateScope();
 			var recipeService = scope.ServiceProvider.GetRequiredService<IRecipeService>();
 			var recipeToAdd = await recipeService.CreateRecipe(recipe);
-            RecipesState.Add(recipeToAdd);
+            RecipesListState.Add(recipeToAdd);
             NotifyStateChanged();
         }
 
@@ -50,7 +52,7 @@ namespace client.Store.RecipeStore
 			var isSuccess = await recipeService.DeleteRecipe(recipe);
             if (isSuccess)
             {
-                RecipesState.Remove(recipe);
+                RecipesListState.Remove(recipe);
                 NotifyStateChanged();
             }     
 
@@ -69,16 +71,16 @@ namespace client.Store.RecipeStore
 			using var scope = _serviceScopeFactory.CreateScope();
 			var recipeService = scope.ServiceProvider.GetRequiredService<IRecipeService>();
 
-			if (RecipesState.Count > 0)
+			if (RecipesListState.Count > 0)
             {
-                RecipeState = RecipesState.FirstOrDefault(r => r.Id == id);
+                RecipeState = RecipesListState.FirstOrDefault(r => r.Id == id);
                 NotifyStateChanged();
             }
             else
             {
-                RecipesState?.Clear();
-                RecipesState = await recipeService.GetAllRecipe();
-                RecipeState = RecipesState.FirstOrDefault(r => r.Id == id);
+                RecipesListState?.Clear();
+                RecipesListState = await recipeService.GetAllRecipe();
+                RecipeState = RecipesListState.FirstOrDefault(r => r.Id == id);
                 NotifyStateChanged();
 
             }

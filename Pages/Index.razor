@@ -13,14 +13,14 @@
 
     </div>
 
-    @if (RecipeStore.RecipesState.Count == 0)
+    @if (RecipeStore.RecipesListState.Count == 0)
     {
         <Loader/>
     }
     else
     {
         <div class="row pb-4 pt-4">
-            @foreach (var recipe in RecipeStore.RecipesState)
+            @foreach (var recipe in RecipeStore.RecipesListState)
             {
                 <div class="col-sm-6 col-lg-3 p-2">
                     <RecipeCard recipe=@recipe />
@@ -38,7 +38,7 @@
 
     protected override  async Task OnInitializedAsync()
     {
-        if (RecipeStore.RecipesState.Count == 0)
+        if (RecipeStore.RecipesListState.Count == 0)
         {
             await RecipeStore.SetRecipesState();
             RecipeStore.OnStateChange += StateHasChanged;

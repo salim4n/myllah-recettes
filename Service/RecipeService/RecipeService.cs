@@ -13,9 +13,11 @@ namespace client.Service.RecipeService
             _http = http;
         }
 
-        public Task<Recipe> CreateRecipe(Recipe recipe)
+        public async Task<Recipe> CreateRecipe(CreateRecipe recipe)
         {
-            throw new NotImplementedException();
+            var result = await _http.PostAsJsonAsync($"{baseUri}/api/Recipe", recipe);
+            var recipeCreated = await result.Content.ReadFromJsonAsync<Recipe>();
+            return recipeCreated;
         }
 
         public async Task<bool> DeleteRecipe(Recipe recipe)
@@ -45,7 +47,7 @@ namespace client.Service.RecipeService
                 return recipe = new();
         }
 
-        public Task<Recipe> UpdateRecipe(Recipe recipe)
+        public Task<Recipe> UpdateRecipe(UpdateRecipe recipe)
         {
             throw new NotImplementedException();
         }

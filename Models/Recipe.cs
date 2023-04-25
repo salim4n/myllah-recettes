@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Components.Forms;
+using System.ComponentModel.DataAnnotations;
 
 namespace client.Models
 {
@@ -8,41 +9,28 @@ namespace client.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-
-        //[ValidateNever]
-        //public List<Ingredient> Ingredients { get; set; }
-
-        //[ValidateNever]
-        //public List<Instruction> Instructions { get; set; }
-        public string? ImageUri { get; set; }
-        public string? UserName { get; set; }
+        public string ImageUri { get; set; }
+        public string UserName { get; set; }
 
     }
 
-    public class CreateRecipe
+    public class CreateRecipeModel
     {
-        //[Key]
-        //public int Id { get; set; }
+        [Required(ErrorMessage = "Le Nom est obligatoire.")]
         public string Name { get; set; }
+        [Required(ErrorMessage = "La Description est obligatoire.")]
         public string Description { get; set; }
-        //[ValidateNever]
-        //public List<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
-        //[ValidateNever]
-        //public List<Instruction> Instructions { get; set; } = new List<Instruction>();
-        public FileAccess File { get; set; }
-        public string? UserName { get; set; }
+        [Required(ErrorMessage = "Une Image est obligatoire.")]
+        public IBrowserFile File { get; set; }
+        public string UserName { get; set; } = "Anonyme";
 
     }
 
     public class UpdateRecipe
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        //[ValidateNever]
-        //public List<Ingredient> Ingredients { get; set; }
-        //[ValidateNever]
-        //public List<Instruction> Instructions { get; set; }
-        public FileAccess File { get; set; }
+        public string? Name { get; set; }
+        public string? Description { get; set; }
+        public IBrowserFile? File { get; set; }
 
     }
 }

@@ -1,0 +1,13 @@
+﻿
+@if (message != string.Empty)
+{
+    <div class="alert alert-danger" role="alert">
+        <h3>@message</h3>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string message { get; set; } = string.Empty;
+
+}

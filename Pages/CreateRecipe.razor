@@ -1,0 +1,94 @@
+﻿@page "/create-recipe"
+@using System.Net.Http
+@using Microsoft.AspNetCore.Components.Forms
+@using System.ComponentModel.DataAnnotations
+@inject NavigationManager Nav
+@inject HttpClient http
+@inject IJSRuntime JSRuntime
+@inject RecipeStore RecipeStore
+
+<h1 class="taupe text-lg-center">Créer une nouvelle recette</h1>
+<div class="row">
+    <PopMessage message="@errorMessage"/>
+</div>
+
+<EditForm Model="@recipe" OnValidSubmit="@SendRecipeToApi">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="d-flex align-items-center justify-content-center pb-4">
+        <button type="submit"
+                disabled="@(!IsValid)"
+                class="btn blanc bg-taupe rounded-pill">@(isLoading ? "Création en cours..." : "Créer la recette")
+    </button>
+    </div>
+    <div class="row">
+        <div class="mb-3 col-6">
+            <label for="name" class="form-label taupe">Nom</label>
+            <InputText class="form-control" id="name" @bind-Value="recipe.Name" />
+            <ValidationMessage For="@(() => recipe.Name)" />
+        </div>
+        <div class="mb-3 col-6">
+            <label for="file" class="form-label taupe">Photo de votre recette</label>
+            <InputFile class="form-control" id="file" maxFileSize="512000"
+            OnChange="@HandleFileChange" />
+            <ValidationMessage For="@(() => recipe.File)" />
+        </div>
+    </div>
+
+    <div class="mb-3 col-6">
+        <label for="description" class="form-label taupe">Description</label>
+        <InputTextArea class="form-control" @bind-Value="recipe.Description" />
+        <ValidationMessage For="@(() => recipe.Description)" />
+    </div>
+</EditForm>
+
+@code {
+    private CreateRecipeModel recipe = new();
+    private bool isLoading = false;
+    string errorMessage = string.Empty;
+
+    private bool IsValid => !string.IsNullOrEmpty(recipe.Name)
+        && !string.IsNullOrEmpty(recipe.Description)
+        && recipe.File != null;
+
+    private async Task SendRecipeToApi()
+    {
+
+        var formData = new MultipartFormDataContent();
+
+        formData.Add(new StringContent(recipe.Name), "Name");
+        formData.Add(new StringContent(recipe.Description), "Description");
+        formData.Add(new StreamContent(recipe.File.OpenReadStream()), "File", recipe.File.Name);
+        formData.Add(new StringContent("Camille"), "UserName");
+        isLoading = true;
+        await RecipeStore.AddRecipe(formData);
+        isLoading = false;
+        if (RecipeStore.ErrorMessage == string.Empty)
+        {
+            Nav.NavigateTo("/");
+        }
+        else
+        {
+            errorMessage = RecipeStore.ErrorMessage;
+        }
+
+    }
+
+
+    private void HandleFileChange(InputFileChangeEventArgs e)
+    {
+        recipe.File = e.File;
+    }
+    public class CreateRecipeForm
+    {
+        [Required(ErrorMessage = "Le Nom est obligatoire.")]
+        public string Name { get; set; }
+        [Required(ErrorMessage = "La Description est obligatoire.")]
+        public string Description { get; set; }
+        [Required(ErrorMessage = "Une Image est obligatoire.")]
+        public IBrowserFile File { get; set; }
+        public string UserName { get; set; }
+    }
+}
+
+

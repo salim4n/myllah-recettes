@@ -13,7 +13,7 @@ namespace client.Service.RecipeService
             _http = http;
         }
 
-        public async Task<Recipe> CreateRecipe(CreateRecipe recipe)
+        public async Task<Recipe> CreateRecipe(CreateRecipeModel recipe)
         {
             var result = await _http.PostAsJsonAsync($"{baseUri}/api/Recipe", recipe);
             var recipeCreated = await result.Content.ReadFromJsonAsync<Recipe>();

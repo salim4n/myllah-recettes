@@ -25,11 +25,23 @@ namespace client.Store.RecipeStore
         private void NotifyStateChanged() => OnStateChange?.Invoke();
 
 
-        public void SetRecipe(Recipe recipe)
+        public async void SetRecipe(Recipe recipe)
         {
             ResetErrorMesage();
-            RecipeState = recipe;
-            NotifyStateChanged();
+            int index = RecipesListState.FindIndex(r => r.Id == recipe.Id);
+            if (index == -1)
+            {
+               await  SetRecipesState();
+            }
+            else
+            {
+                RecipesListState[index].Name = recipe.Name;
+                RecipesListState[index].Description = recipe.Description;
+                RecipesListState[index].ImageUri = recipe.ImageUri;
+                NotifyStateChanged();
+            }
+
+            
         }
 
         public async Task SetRecipesState()

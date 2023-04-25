@@ -71,7 +71,7 @@
         isLoading = false;
         if (recipeUpdated.Id is not 0)
         {
-            RecipeStore.RecipesListState.Add(recipeUpdated);
+            RecipeStore.SetRecipe(recipeUpdated);
             RecipeStore.OnStateChange += StateHasChanged;
             Nav.NavigateTo("/recipeDetails/"+recipeUpdated.Id);
         }

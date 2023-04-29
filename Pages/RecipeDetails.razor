@@ -4,45 +4,44 @@
 @implements IDisposable
 
 <div class="container pt-4 pt-md-5">
-	@if(RecipeStore.RecipesListState is not null)
+	@if (RecipeStore.RecipesListState is not null)
 	{
 		<div class="row pb-4">
-			<div class="col-6">
+			<div class="col-sm-6 mb-2 mb-sm-0">
 				<button class="btn btn-danger form-control rounded-pill"
-				@onclick="()=>handleDelete()">
+					@onclick="()=>handleDelete()">
 					Supprimer
 				</button>
 			</div>
-			<div class="col-6">
-				<button class="btn btn-warning blanc form-control rounded-pill"
-				@onclick="()=>NavigateToUpdateRecipe()">
+			<div class="col-sm-6">
+				<button class="btn btn-warning form-control rounded-pill"
+					@onclick="()=>NavigateToUpdateRecipe()">
 					Modifier
 				</button>
 			</div>
 		</div>
 		<div class="row container bg-taupe rounded-pill text-center p-3 m-3">
-			<h1 class=" blanc">@RecipeStore?.RecipeState.Name</h1>
+			<h1 class="text-white">@RecipeStore?.RecipeState.Name</h1>
 		</div>
 		<div class="row">
-			<div class="col-7">
-				<div class="list-group bg-taupe text-center">
-					<div class="blanc">@((MarkupString?)@RecipeStore?.RecipeState.Description)</div>
+			<div class="col-md-5">
+				<img src="@RecipeStore?.RecipeState.ImageUri"
+					 class="img-fluid rounded-circle"
+					 alt="@RecipeStore.RecipeState.Name" />
+			</div>
+			<div class="col-md-7">
+				<div class="card bg-taupe text-center">
+					<div class="card-body text-white">@((MarkupString?)@RecipeStore?.RecipeState.Description)</div>
 				</div>
 				<br />
-			</div>
-			<div class="col-5">
-				<img src="@RecipeStore?.RecipeState.ImageUri"
-					 width="100%"
-					 alt="@RecipeStore.RecipeState.Name" />
 			</div>
 		</div>
 	}
 	else
 	{
-		<Loader/>
+		<Loader />
 	}
-
-		</div>
+</div>
 
 @code {
 	[Parameter]
@@ -60,26 +59,19 @@
 		{
 			RecipeStore.GetRecipe(Id);
 			RecipeStore.OnStateChange += StateHasChanged;
-
 		}
 	}
 
-	protected  async Task handleDelete()
+	protected async Task handleDelete()
 	{
 		await RecipeStore.DeleteRecipe(RecipeStore.RecipeState);
 		RecipeStore.OnStateChange += StateHasChanged;
 		Navigation.NavigateTo("/");
-
 	}
 
 	protected void NavigateToUpdateRecipe()
 	{
 		Navigation.NavigateTo($"/updateRecipe/{Id}");
-	}
-
-	protected async Task handleUpdate()
-	{
-		NavigateToUpdateRecipe();
 	}
 
 	public void Dispose()
@@ -89,9 +81,8 @@
 }
 
 <style>
-	img{
-		border-radius: 50%;
-		height: 500px;
-		object-fit:cover;
+	img {
+		max-width: 100%;
+		height: auto;
 	}
 </style>

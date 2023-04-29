@@ -25,12 +25,12 @@
     </button>
     </div>
     <div class="row">
-        <div class="mb-3 col-6">
+        <div class="mb-3 col-lg-6 col-md-6 col-sm-12">
             <label for="name" class="form-label taupe">Nom</label>
             <InputText class="form-control" id="name" @bind-Value="recipe.Name" />
             <ValidationMessage For="@(() => recipe.Name)" />
         </div>
-        <div class="mb-3 col-6">
+        <div class="mb-3  col-lg-6 col-md-6 col-sm-12">
             <label for="file" class="form-label taupe">Photo de votre recette</label>
             <InputFile class="form-control" id="file"
             OnChange="@HandleFileChange" />
@@ -38,10 +38,12 @@
         </div>
     </div>
 
-    <div class="mb-3 col-6">
-        <label for="description" class="form-label taupe">Description</label>
-        <InputTextArea class="form-control" @bind-Value="recipe.Description" />
-        <ValidationMessage For="@(() => recipe.Description)" />
+    <div class=" row mb-3 ">
+        <Editor Field="() => recipe.Description"
+                ApiKey="mgnp2n74430ofn6kb0ud75ephti6soe7yp4vugf0tfnw1k5a"
+                JsConfSrc="sample"
+                @bind-Value=recipe.Description />
+        <ValidationMessage For="() => recipe.Description" />
     </div>
 </EditForm>
 

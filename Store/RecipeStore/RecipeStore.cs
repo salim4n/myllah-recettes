@@ -18,8 +18,7 @@ namespace client.Store.RecipeStore
         public event Action? OnStateChange;
         public List<Recipe> RecipesListState { get; set; } = new List<Recipe>();
         public Recipe RecipeState { get; set; } = new Recipe();
-        public UpdateRecipeModel UpdateRecipeState { get; set; } = new ();
-        public CreateRecipeModel CreateRecipeState { get; set; } = new ();
+
         public string ErrorMessage { get; set; } = string.Empty;
 
         private void NotifyStateChanged() => OnStateChange?.Invoke();
@@ -69,14 +68,6 @@ namespace client.Store.RecipeStore
 
         }
 
-        public async Task UpdateRecipe(UpdateRecipeModel recipe)
-        {
-            ResetErrorMesage();
-            using var scope = _serviceScopeFactory.CreateScope();
-			var recipeService = scope.ServiceProvider.GetRequiredService<IRecipeService>();
-			RecipeState = await recipeService.UpdateRecipe(recipe);
-            NotifyStateChanged();
-        }
 
         public async void GetRecipe(int id)
         {

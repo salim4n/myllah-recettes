@@ -2,6 +2,7 @@
 @inject NavigationManager Navigation
 @inject RecipeStore RecipeStore
 @implements IDisposable
+@attribute [Authorize]
 
 <div class="container pt-4 pt-md-5">
 	@if (RecipeStore.RecipesListState is not null)
@@ -85,4 +86,12 @@
 		max-width: 100%;
 		height: auto;
 	}
+
+	a {
+		color: white !important;
+	}
+
+	a:hover {
+			color: white !important;
+		}
 </style>

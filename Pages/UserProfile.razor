@@ -4,59 +4,19 @@
 @inject Microsoft.Graph.GraphServiceClient GraphServiceClient
 @attribute [Authorize]
 
-<h3>User Profile</h3>
+<h3 class="taupe">Mon Profil</h3>
 @if (user == null)
 {
     <Loader/>
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Property</th>
-                <th>Value</th>
-            </tr>
-        </thead>
-        <tr>
-            <td> DisplayName </td>
-            <td> @user.DisplayName </td>
-        </tr>
-        <tr>
-            <td> UserPrincipalName </td>
-            <td> @user.UserPrincipalName </td>
-        </tr>
-    </table>
-    <div class="row container bg-taupe">
-        <ul>
-
-            <li>
-                <h1 class="blanc">
-                    @user.Surname
-                </h1>
-            </li>
-            <li>
-                <h1 class="blanc">
-                    @user.GivenName
-                </h1>
-            </li>
-            <li>
-                <h1 class="blanc">
-                    @user.StreetAddress
-                </h1>
-            </li>
-            <li>
-                <h1 class="blanc">
-                    @user.PostalCode
-                </h1>
-            </li>
-            <li>
-                <h1 class="blanc">
-                    @user.MobilePhone
-                </h1>
-            </li>
-
-        </ul>
+   <div class="row">
+    <div class="card bg-taupe">
+        <table>
+            
+        </table>
+    </div>
     </div>
 }
 

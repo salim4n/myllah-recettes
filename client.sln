@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "myllah-recettes", "myllah-recettes.csproj", "{A64E0A12-7EA9-46BD-801E-6C0F2A403FA5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "client", "client.csproj", "{A64E0A12-7EA9-46BD-801E-6C0F2A403FA5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{12E856CE-3A2B-4173-B4D6-9302ECFEBC96}"
 EndProject

@@ -1,4 +1,4 @@
-﻿@page "/recipeDetails/{id:int}"
+﻿@page "/recipeDetails/{id}"
 @inject NavigationManager Navigation
 @inject RecipeStore RecipeStore
 @implements IDisposable
@@ -22,13 +22,13 @@
 			</div>
 		</div>
 		<div class="row container bg-taupe rounded-pill text-center p-3 m-3">
-			<h1 class="text-white">@RecipeStore?.RecipeState.Name</h1>
+			<h1 class="text-white">@RecipeStore?.RecipeState.Title</h1>
 		</div>
 		<div class="row">
 			<div class="col-md-5">
-				<img src="@RecipeStore?.RecipeState.ImageUri"
+				<img src="@RecipeStore?.RecipeState.ImageUrl"
 					 class="img-fluid rounded-circle"
-					 alt="@RecipeStore.RecipeState.Name" />
+					 alt="@RecipeStore.RecipeState.Title" />
 			</div>
 			<div class="col-md-7">
 				<div class="card bg-taupe text-center">
@@ -46,7 +46,7 @@
 
 @code {
 	[Parameter]
-	public int Id { get; set; }
+	public string Id { get; set; }
 
 	bool deleteSuccess = false;
 

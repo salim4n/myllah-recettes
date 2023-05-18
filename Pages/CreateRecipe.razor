@@ -26,9 +26,9 @@
     </div>
     <div class="row">
         <div class="mb-3 col-lg-6 col-md-6 col-sm-12">
-            <label for="name" class="form-label taupe">Nom</label>
-            <InputText class="form-control" id="name" @bind-Value="recipe.Name" />
-            <ValidationMessage For="@(() => recipe.Name)" />
+            <label for="title" class="form-label taupe">Titre</label>
+            <InputText class="form-control" id="title" @bind-Value="recipe.Title" />
+            <ValidationMessage For="@(() => recipe.Title)" />
         </div>
         <div class="mb-3  col-lg-6 col-md-6 col-sm-12">
             <label for="file" class="form-label taupe">Photo de votre recette</label>
@@ -39,6 +39,7 @@
     </div>
 
     <div class=" row mb-3 ">
+        <label for="description" class="form-label taupe">Description</label>
         <Editor Field="() => recipe.Description"
                 ApiKey="mgnp2n74430ofn6kb0ud75ephti6soe7yp4vugf0tfnw1k5a"
                 JsConfSrc="sample"
@@ -53,7 +54,7 @@
     private bool isLoading = false;
     string errorMessage = string.Empty;
 
-    private bool IsValid => !string.IsNullOrEmpty(recipe.Name)
+    private bool IsValid => !string.IsNullOrEmpty(recipe.Title)
         && !string.IsNullOrEmpty(recipe.Description)
         && recipe.File != null;
 
@@ -75,7 +76,7 @@
         isLoading = true;
         var recipeDb = await RecipeService.CreateRecipe(recipe);
         isLoading = false;
-        if (recipeDb.Id is not 0)
+        if (recipeDb.Id is not null)
         {
             RecipeStore.RecipesListState.Add(recipeDb);
             Nav.NavigateTo("/");

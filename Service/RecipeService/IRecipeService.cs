@@ -8,6 +8,6 @@ namespace client.Service.RecipeService
         public Task<Recipe> CreateRecipe(CreateRecipeModel recipe);
         public Task<Recipe> UpdateRecipe(UpdateRecipeModel recipe);
         public Task<bool> DeleteRecipe(Recipe recipe);
-        public Task<Recipe> GetRecipeById(int id);
+        public Task<Recipe> GetRecipeById(string id);
     }
 }

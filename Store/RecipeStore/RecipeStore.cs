@@ -26,6 +26,7 @@ namespace client.Store.RecipeStore
 
         public async void SetRecipe(Recipe recipe)
         {
+
             ResetErrorMesage();
             int index = RecipesListState.FindIndex(r => r.Id == recipe.Id);
             if (index == -1)
@@ -34,9 +35,9 @@ namespace client.Store.RecipeStore
             }
             else
             {
-                RecipesListState[index].Name = recipe.Name;
+                RecipesListState[index].Title = recipe.Title;
                 RecipesListState[index].Description = recipe.Description;
-                RecipesListState[index].ImageUri = recipe.ImageUri;
+                RecipesListState[index].ImageUrl = recipe.ImageUrl;
                 NotifyStateChanged();
             }
 
@@ -69,7 +70,7 @@ namespace client.Store.RecipeStore
         }
 
 
-        public async void GetRecipe(int id)
+        public async void GetRecipe(string id)
         {
             ResetErrorMesage();
             using var scope = _serviceScopeFactory.CreateScope();

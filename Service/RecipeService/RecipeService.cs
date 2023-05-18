@@ -6,7 +6,7 @@ namespace client.Service.RecipeService
 {
     public class RecipeService : IRecipeService
     {
-        private readonly string baseUri = "https://myllah-recipe-api.azurewebsites.net/";
+        private readonly string baseUri = "http://localhost:7214/api/";
         private readonly HttpClient _http;
 
         public RecipeService(HttpClient http)
@@ -18,42 +18,33 @@ namespace client.Service.RecipeService
         {
             var formContent = new MultipartFormDataContent
             {
-                { new StringContent(recipe.Name), "Name" },
-                { new StringContent(recipe.Description), "Description" },
+                { new StringContent(recipe.Title), "title" },
+                { new StringContent(recipe.Description), "description" },
                 { new StreamContent(recipe.File.OpenReadStream()), "file", recipe.File.Name },
                 { new StringContent(recipe.UserName), "UserName" }
             };
 
-            var result = await _http.PostAsync($"{baseUri}api/Recipe", formContent);
+            var result = await _http.PostAsync($"{baseUri}Recipes", formContent);
             var recipeCreated = await result.Content.ReadFromJsonAsync<Recipe>();
             return recipeCreated;
         }
 
         public async Task<bool> DeleteRecipe(Recipe recipe)
         {
-           var result =  await _http.DeleteAsync($"{baseUri}api/recipe/{recipe.Id}");
-            if(result.IsSuccessStatusCode)
-                return true;
-            else
-                return false;
+           var result =  await _http.DeleteAsync($"{baseUri}recipes/{recipe.Id}");
+            return result.IsSuccessStatusCode;
         }
 
         public async Task<List<Recipe>> GetAllRecipe()
         {
-            var recipes = await _http.GetFromJsonAsync<List<Recipe>>($"{baseUri}api/Recipe");
-            if(recipes is not null)
-                return recipes;
-            else 
-                return new List<Recipe>();
+            var recipes = await _http.GetFromJsonAsync<List<Recipe>>($"{baseUri}Recipes");
+            return recipes is not null ? recipes : new List<Recipe>();
         }
 
-        public async Task<Recipe> GetRecipeById(int id)
+        public async Task<Recipe> GetRecipeById(string id)
         {
-            var recipe = await _http.GetFromJsonAsync<Recipe>($"{baseUri}api/recipe/{id}");
-            if (recipe is not null)
-                return recipe;
-            else
-                return recipe = new();
+            var recipe = await _http.GetFromJsonAsync<Recipe>($"{baseUri}recipes/{id}");
+            return recipe is not null ? recipe : (recipe = new());
         }
 
         public async Task<Recipe> UpdateRecipe(UpdateRecipeModel recipe)
@@ -62,20 +53,20 @@ namespace client.Service.RecipeService
             try
             {
                 var formContent = new MultipartFormDataContent();
-                if(recipe.Name != string.Empty)
+                if(recipe.Title != string.Empty)
                 {
-                    formContent.Add(new StringContent(recipe.Name), "Name");
+                    formContent.Add(new StringContent(recipe.Title), "title");
                 }
                 if (recipe.Description != string.Empty)
                 {
-                    formContent.Add(new StringContent(recipe.Description), "Description");
+                    formContent.Add(new StringContent(recipe.Description), "description");
                 }
                 if(recipe.File is not null)
                 {
                     formContent.Add(new StreamContent(recipe.File.OpenReadStream()), "file", recipe.File.Name);
                 }
-
-                var result = await _http.PutAsync($"{baseUri}api/recipe/{recipe.Id}", formContent);
+                
+                var result = await _http.PutAsync($"{baseUri}recipes/{recipe.Id}", formContent);
 
                 if (result.IsSuccessStatusCode)
                 {

@@ -1,4 +1,4 @@
-﻿@page "/updateRecipe/{id:int}"
+﻿@page "/updateRecipe/{id}"
 @using System.Net.Http
 @using Microsoft.AspNetCore.Components.Forms
 @using System.ComponentModel.DataAnnotations
@@ -24,9 +24,9 @@
     </div>
     <div class="row">
         <div class="mb-3 col-lg-6 col-md-6 col-sm-12">
-            <label for="name" class="form-label taupe">Nom</label>
-            <InputText class="form-control" id="name" @bind-Value="recipeToUpdate.Name" />
-            <ValidationMessage For="@(() => recipeToUpdate.Name)" />
+            <label for="title" class="form-label taupe">Nom</label>
+            <InputText class="form-control" id="title" @bind-Value="recipeToUpdate.Title" />
+            <ValidationMessage For="@(() => recipeToUpdate.Title)" />
         </div>
         <div class="mb-3 col-lg-6 col-md-6 col-sm-12">
             <label for="file" class="form-label taupe">Nouvelle Photo de votre recette</label>
@@ -50,7 +50,7 @@
     
 
     [Parameter]
-    public int Id { get; set; }
+    public string Id { get; set; }
     private UpdateRecipeModel recipe = new();
     private Recipe recipeToUpdate = new();
     User? user;
@@ -68,12 +68,12 @@
     private async Task SendRecipeToApi()
     {
         recipe.Id = Id;
-        recipe.Name = recipeToUpdate.Name;
+        recipe.Title = recipeToUpdate.Title;
         recipe.Description = recipeToUpdate.Description;
         isLoading = true;
         var recipeUpdated = await RecipeService.UpdateRecipe(recipe);
         isLoading = false;
-        if (recipeUpdated.Id is not 0)
+        if (recipeUpdated.Id is not null)
         {
             RecipeStore.SetRecipe(recipeUpdated);
             RecipeStore.OnStateChange += StateHasChanged;

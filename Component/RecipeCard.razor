@@ -4,13 +4,13 @@
 
 <span @onclick="()=> handleClick(recipe.Id)">
 	<div class="card rc-card hoverable ">
-		<img src="@recipe?.ImageUri"
+		<img src="@recipe.ImageUrl"
 			 class="card-img-top"
-			 alt="@recipe?.Name"
+			 alt="@recipe.Title"
 			  />
 		<div class="card-body bg-taupe rounded-bottom">
 			<div class="text-center ">
-				<h5 class="card-title blanc">@recipe?.Name</h5>
+				<h5 class="card-title blanc">@recipe.Title</h5>
 			</div>
 		</div>
 	</div>
@@ -19,9 +19,9 @@
 
 @code {
 	[Parameter]
-	public Recipe? recipe { get; set; }
+	public Recipe recipe { get; set; } = default!;
 
-	protected void handleClick(int id)
+	protected void handleClick(string id)
 	{
 		Navigate.NavigateTo($"/RecipeDetails/{id}");
 	}

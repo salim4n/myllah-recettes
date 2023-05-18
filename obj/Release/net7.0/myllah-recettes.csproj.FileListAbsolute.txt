@@ -1,0 +1,6 @@
+C:\Users\salim\Desktop\myllah\swa\client\obj\Release\net7.0\myllah-recettes.csproj.AssemblyReference.cache
+C:\Users\salim\Desktop\myllah\swa\client\obj\Release\net7.0\myllah-recettes.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\salim\Desktop\myllah\swa\client\obj\Release\net7.0\myllah-recettes.AssemblyInfoInputs.cache
+C:\Users\salim\Desktop\myllah\swa\client\obj\Release\net7.0\myllah-recettes.AssemblyInfo.cs
+C:\Users\salim\Desktop\myllah\swa\client\obj\Release\net7.0\myllah-recettes.csproj.CoreCompileInputs.cache
+C:\Users\salim\Desktop\myllah\swa\client\obj\Release\net7.0\myllah-recettes.MvcApplicationPartsAssemblyInfo.cache

@@ -23,8 +23,6 @@
         <div class="row pb-4 pt-4">
             @foreach (var recipe in RecipeStore.RecipesListState)
             {
-                <div><h6 class="text-warning">@recipe.Id</h6>
-                    <h6>@recipe.Title</h6></div>
                 <div class="col-sm-6 col-lg-3 p-2">
                     <RecipeCard recipe=@recipe />
                 </div>

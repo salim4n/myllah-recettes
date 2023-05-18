@@ -6,7 +6,7 @@ namespace client.Service.RecipeService
 {
     public class RecipeService : IRecipeService
     {
-        private readonly string baseUri = "http://localhost:7214/api/";
+        private readonly string baseUri = "https://myllahfunction20230518160449.azurewebsites.net/api/";
         private readonly HttpClient _http;
 
         public RecipeService(HttpClient http)
